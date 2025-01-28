@@ -585,9 +585,10 @@ class ConventionalCommitMessage {
     ) {
       this.next = await ask(
         this.inputMessage('body'),
-        (input) =>
-          (this.body = wrap(input, 72, { hard: true }))
+        (input) => (this.body = input ? wrap(input, 72, { hard: true }) : '')
       );
+    } else {
+      this.body = '';  // Set empty string instead of undefined
     }
   }
 
@@ -611,8 +612,10 @@ class ConventionalCommitMessage {
     ) {
       this.next = await ask(
         this.inputMessage('footer'),
-        (input) => (this.footer = input)
+        (input) => (this.footer = input || '')  // Use empty string if no input
       );
+    } else {
+      this.footer = '';  // Set empty string instead of undefined
     }
   }
 
@@ -624,8 +627,10 @@ class ConventionalCommitMessage {
     const main = `${this.type}${typeof this.scope === 'string' && this.scope ?
       `(${this.scope})` : ''
       }: ${this.subject}`;
-    const body = `${this.body}`;
-    const footer = `${this.breaking ? `BREAKING CHANGE: ${this.breaking}|` : ''}${this.messageFooter()}`;
+    const body = this.body || '';  // Use empty string if body is undefined
+    const footer = this.breaking ?
+      `BREAKING CHANGE: ${this.breaking}${this.footer ? '|' + this.messageFooter() : ''}` :
+      this.messageFooter();
 
     return {
       main,
