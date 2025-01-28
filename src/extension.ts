@@ -16,6 +16,7 @@ interface Configuration {
   useGitRoot: boolean;
   shell: boolean;
   signCommits: boolean;
+  configAbsPath?: string;
 }
 
 function getConfiguration(): Configuration {
@@ -148,23 +149,55 @@ async function findLookupPath(): Promise<string | undefined> {
 }
 
 async function readCzConfig(lookupPath: string): Promise<CzConfig | undefined> {
-  let configPath = join(lookupPath, '.cz-config.js');
+  const config = getConfiguration();
+  let configPath: string;
 
+  // If useGitRoot is true and we're in a git root, check there first
+  if (config.useGitRoot && gitRoot) {
+    channel.appendLine(`gitRoot setting is set and git root is: ${gitRoot}`);
+    configPath = join(gitRoot, '.cz-config.js');
+    if (await sander.exists(configPath)) {
+      channel.appendLine(`Found config in git root: ${configPath}`);
+      return require(configPath) as CzConfig;
+    }
+    channel.appendLine(`No config found in git root: ${configPath}`);
+  }
+
+  // Then check workspace directory
+  configPath = join(lookupPath, '.cz-config.js');
   if (await sander.exists(configPath)) {
+    channel.appendLine(`Found config in workspace: ${configPath}`);
     return require(configPath) as CzConfig;
   }
+  channel.appendLine(`No config found in workspace: ${configPath}`);
+
+  // Check package.json in workspace
   const pkg = await readPackageJson(lookupPath);
-  if (!pkg) {
-    return undefined;
-  }
-  configPath = join(lookupPath, '.cz-config.js');
-  if (hasCzConfig(pkg)) {
+  if (pkg && hasCzConfig(pkg)) {
     configPath = join(lookupPath, pkg.config['cz-customizable'].config);
+    if (await sander.exists(configPath)) {
+      channel.appendLine(`Found config from package.json: ${configPath}`);
+      return require(configPath) as CzConfig;
+    }
+    channel.appendLine(`No config found in package.json: ${configPath}`);
   }
-  if (!(await sander.exists(configPath))) {
-    return undefined;
+
+  // Finally check configAbsPath if set
+  if (config.configAbsPath) {
+    channel.appendLine(`configAbsPath is set to: ${config.configAbsPath}`);
+    const customConfigPath = config.configAbsPath.replace(
+      '${userHome}',
+      require('os').homedir()
+    );
+
+    if (await sander.exists(customConfigPath)) {
+      channel.appendLine(`Found config at configAbsPath: ${customConfigPath}`);
+      return require(customConfigPath) as CzConfig;
+    }
+    channel.appendLine(`Warning: Configured configAbsPath not found: ${customConfigPath}`);
   }
-  return require(configPath) as CzConfig;
+  channel.appendLine(`Using default config`);
+  return undefined;
 }
 
 async function readPackageJson(

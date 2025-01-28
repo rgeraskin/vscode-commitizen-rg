@@ -64,6 +64,11 @@
           "type": "boolean",
           "default": false,
           "description": "Set to true to sign commits by adding the -S flag"
+        },
+        "commitizen.configAbsPath": {
+          "type": "string",
+          "default": "",
+          "description": "Absolute path to .cz-config.js file. Supports ${userHome} variable (e.g., ${userHome}/.config/cz-config.js)"
         }
       }
     },
