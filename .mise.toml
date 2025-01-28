@@ -1,0 +1,12 @@
+[tools]
+"npm:vsce" = "2.15.0"
+
+[env]
+CODE = "cursor"
+
+[tasks.build]
+run = "vsce package"
+
+[tasks.install]
+depends = ["build"]
+run = "$CODE --install-extension vscode-commitizen-*.vsix"
