@@ -357,7 +357,6 @@ const buildCommitArguments = (message: Messages): string[] => {
 };
 
 async function commit(cwd: string, message: Messages): Promise<void> {
-
   channel.appendLine(`About to commit '${message.main}'`);
 
   try {
@@ -377,10 +376,38 @@ async function commit(cwd: string, message: Messages): Promise<void> {
       }
     }
   } catch (e: any) {
+    // Format the commit message for the input box
+    const formattedMessage = formatCommitMessage(message);
+
+    // Get the Git extension
+    const gitExtension = vscode.extensions.getExtension('vscode.git');
+    if (gitExtension) {
+      const git = gitExtension.exports.getAPI(1);
+      const repo = git.repositories[0];
+      if (repo) {
+        // Set the commit message in the source control input box
+        repo.inputBox.value = formattedMessage;
+      }
+    }
+
     vscode.window.showErrorMessage(e.message);
     channel.appendLine(e.message);
     channel.appendLine(e.stack);
   }
+}
+
+function formatCommitMessage(message: Messages): string {
+  let formattedMessage = message.main;
+
+  if (message.body) {
+    formattedMessage += '\n\n' + message.body.replace(/\|/g, '\n');
+  }
+
+  if (message.footer) {
+    formattedMessage += '\n\n' + message.footer.replace(/\|/g, '\n');
+  }
+
+  return formattedMessage;
 }
 
 function hasOutput(result?: { stdout?: string }): boolean {

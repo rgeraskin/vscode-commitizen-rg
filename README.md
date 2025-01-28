@@ -10,6 +10,7 @@ This vscode extension adds [commitizen support](https://github.com/commitizen).
 It is a fork of [KnisterPeter/vscode-commitizen](https://github.com/KnisterPeter/vscode-commitizen) with following features:
 
 1. Support for more places to look for the config file
+1. Put the commit message in the commit message in the source control input box on failure
 
 ## Usage
 
