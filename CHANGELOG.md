@@ -1,3 +1,9 @@
+# [1.2.0](https://github.com/KnisterPeter/vscode-commitizen/compare/v1.1.0...v1.2.0) (2025-01-29)
+
+* Support for more places to look for the config file
+* Put the commit message in the commit message in the source control input box on failure
+* Fixes some issues with `skipQuestions` in `.cz-config.js`
+
 # [1.1.0](https://github.com/KnisterPeter/vscode-commitizen/compare/v1.0.3...v1.1.0) (2022-02-15)
 
 
