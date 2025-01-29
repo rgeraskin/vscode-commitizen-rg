@@ -1,9 +1,9 @@
 {
-  "name": "vscode-commitizen",
-  "displayName": "Visual Studio Code Commitizen Support",
+  "name": "vscode-commitizen-rg",
+  "displayName": "Visual Studio Code Commitizen Support (rgeraskin fork)",
   "description": "commitizen - git commit with conventions",
   "version": "1.1.0",
-  "publisher": "KnisterPeter",
+  "publisher": "rgeraskin",
   "engines": {
     "vscode": "^1.83.0"
   },
@@ -72,7 +72,7 @@
     },
     "commands": [
       {
-        "command": "vscode-commitizen.commit",
+        "command": "vscode-commitizen-rg.commit",
         "title": "Conventional Commits",
         "category": "Commitizen",
         "icon": "images/commitizen-logo.svg"
@@ -82,7 +82,7 @@
       "scm/title": [
         {
           "when": "scmProvider == git",
-          "command": "vscode-commitizen.commit",
+          "command": "vscode-commitizen-rg.commit",
           "group": "navigation"
         }
       ]
@@ -121,7 +121,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/KnisterPeter/vscode-commitizen.git"
+    "url": "https://github.com/rgeraskin/vscode-commitizen-rg.git"
   },
   "author": {
     "name": "Markus Wolf",
@@ -130,9 +130,9 @@
   "license": "MIT",
   "icon": "images/commitizen-logo.png",
   "bugs": {
-    "url": "https://github.com/KnisterPeter/vscode-commitizen/issues"
+    "url": "https://github.com/rgeraskin/vscode-commitizen-rg/issues"
   },
-  "homepage": "https://github.com/KnisterPeter/vscode-commitizen",
+  "homepage": "https://github.com/rgeraskin/vscode-commitizen-rg",
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"

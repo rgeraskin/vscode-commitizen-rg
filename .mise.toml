@@ -9,4 +9,4 @@ run = "vsce package"
 
 [tasks.install]
 depends = ["build"]
-run = "$CODE --install-extension vscode-commitizen-*.vsix"
+run = "$CODE --install-extension vscode-commitizen-rg-*.vsix"

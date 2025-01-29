@@ -33,7 +33,7 @@ export async function activate(
   channel.appendLine('Commitizen support started');
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('vscode-commitizen.commit', async () => {
+    vscode.commands.registerCommand('vscode-commitizen-rg.commit', async () => {
       const lookupPath = await findLookupPath();
       if (lookupPath) {
         const czConfig = await readCzConfig(lookupPath);
