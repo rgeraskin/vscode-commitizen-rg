@@ -17,9 +17,7 @@
     "changelog",
     "conventional-changelog"
   ],
-  "activationEvents": [
-    "onCommand:vscode-commitizen.commit"
-  ],
+  "activationEvents": [],
   "main": "./out/extension",
   "contributes": {
     "configuration": {

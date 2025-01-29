@@ -91,7 +91,7 @@ async function findLookupPath(): Promise<string | undefined> {
     const repositories = {};
     vscode.workspace.workspaceFolders.forEach(
       (folder: vscode.WorkspaceFolder) => {
-        repositories[folder.name] = {
+        (repositories as Record<string, { label: string, description: string }>)[folder.name] = {
           label: folder.name,
           description: folder.uri.fsPath
         };
@@ -108,9 +108,8 @@ async function findLookupPath(): Promise<string | undefined> {
       Object.values(repositories),
       pickOptions
     );
-
     if (pick) {
-      ws = repositories[pick.label].description;
+      ws = (repositories as Record<string, { label: string, description: string }>)[pick.label].description;
     }
   } else {
     ws = vscode.workspace.workspaceFolders[0].uri.fsPath;
@@ -647,14 +646,13 @@ class ConventionalCommitMessage {
       }${this.footer}`
       : '';
   }
-
   private inputMessage(messageType: string): string {
     return ConventionalCommitMessage.hasCustomMessage(
       this.czConfig,
       messageType
     )
-      ? this.czConfig.messages[messageType]
-      : DEFAULT_MESSAGES[messageType];
+      ? this.czConfig.messages[messageType as keyof typeof this.czConfig.messages] ?? DEFAULT_MESSAGES[messageType as keyof typeof DEFAULT_MESSAGES]
+      : DEFAULT_MESSAGES[messageType as keyof typeof DEFAULT_MESSAGES];
   }
 }
 
